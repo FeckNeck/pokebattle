@@ -1,4 +1,5 @@
 import instance from "../../api/api";
+import router from "@/router/index";
 
 const state = () => ({
   status: "",
@@ -15,6 +16,9 @@ const mutations = {
   },
   logUser: function (state, token) {
     state.token = token;
+  },
+  logout: function (state) {
+    state.token = "";
   },
 };
 
@@ -59,6 +63,19 @@ const actions = {
       .get("/users/account", { withCredentials: true })
       .then(function (response) {
         console.log("response:", response);
+      })
+      .catch(function (error) {
+        console.log("error:", error);
+      });
+  },
+  logout: ({ commit }) => {
+    instance
+      .get("/users/logout", { withCredentials: true })
+      .then(function (response) {
+        console.log("response:", response);
+        commit("logout");
+        localStorage.removeItem("token");
+        router.push("/pokedex");
       })
       .catch(function (error) {
         console.log("error:", error);

@@ -5,6 +5,10 @@ import "./index.css";
 import store from "./store/index.js";
 import VueToast from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+AOS.init();
 
 //localStorage.removeItem("token");
 console.log(localStorage.getItem("token"));

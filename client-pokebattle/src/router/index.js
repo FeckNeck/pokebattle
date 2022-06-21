@@ -53,7 +53,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(store.getters.isLoggedIn);
   if (!store.getters.isLoggedIn && to.meta.requiresAuth) {
     console.log("1");
     next("/login");
