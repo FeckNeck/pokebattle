@@ -1,16 +1,18 @@
 <template>
   <div
     class="
-      xl:px-24 xl:max-w-7xl
-      lg:max-w-5xl lg:px-20
-      md:max-w-5xl
-      sm:max-w-2xl sm:px-8
+      xl:px-24 xl:max-w-4xl
+      lg:max-w-3xl
+      md:max-w-2xl md:px-14
+      sm:max-w-xl
       mx-auto
-      py-4
       px-4
+      py-4
+      w-full
+      max-w-xs
     "
   >
-    <div class="flex justify-between pb-7">
+    <div class="pb-7">
       <label class="flex flex-row items-center">
         <svg
           class="absolute pl-2 text-slate-400"
@@ -46,42 +48,53 @@
         />
       </label>
     </div>
-    <div
-      class="grid sm:grid-cols-4 lg:grid-cols-5 grid-cols-2 gap-6"
-      data-aos="fade-up"
-      data-aos-duration="1000"
-    >
+    <div class="py-4">
       <div
-        v-for="(pokemon, index) in pokemons"
-        :key="'poke' + index"
-        :class="colorFromType(pokemon.Types[0])"
         class="
-          h-fit
-          p-4
-          shadow-login
-          border
-          rounded
-          transition-all
-          duration-300
-          ease-in-out
-          hover:cursor-pointer hover:-translate-y-1
-          dark:bg-secondary-dark
-          dark:border-x-ternary-dark
-          dark:border-t-ternary-dark
-          dark:shadow-ternary-dark
+          grid
+          sm:grid-cols-4
+          lg:grid-cols-5
+          grid-cols-2
+          gap-6
+          min-h-[750px]
         "
-        @click="
-          this.$router.push({
-            name: 'pokemonDetails',
-            params: { id: pokemon.PokedexNumber },
-          })
-        "
+        data-aos="fade-up"
+        data-aos-duration="1000"
+        data-aos-delay="300"
       >
-        <img
-          class="transition-all pokemon-image"
-          :src="pixelImageLink + pokemon.PokedexNumber + '.png'"
-        />
-        <p class="text-center">{{ pokemon.Name }}</p>
+        <div
+          v-for="(pokemon, index) in pokemons"
+          :key="'poke' + index"
+          :class="colorFromType(pokemon.Types[0])"
+          class="
+            p-4
+            h-fit
+            mx-auto
+            shadow-login
+            border
+            rounded
+            transition-all
+            duration-300
+            ease-in-out
+            hover:cursor-pointer hover:-translate-y-1
+            dark:bg-secondary-dark
+            dark:border-x-ternary-dark
+            dark:border-t-ternary-dark
+            dark:shadow-ternary-dark
+          "
+          @click="
+            this.$router.push({
+              name: 'pokemonDetails',
+              params: { id: pokemon.PokedexNumber },
+            })
+          "
+        >
+          <img
+            class="transition-all pokemon-image max-w-[84px] max-h-[84px]"
+            :src="pixelImageLink + pokemon.PokedexNumber + '.png'"
+          />
+          <p class="text-center">{{ pokemon.Name }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -92,6 +105,7 @@ export default {
     return {
       min: 0,
       max: 20,
+      filterSearch: "",
       currentUrl: String,
       canScroll: true,
       pokemons: [],
@@ -104,8 +118,9 @@ export default {
   },
   created() {
     if (localStorage.getItem("scrollPosition") !== null) {
-      this.max = localStorage.getItem("scrollPosition");
-      this.fetchPokemons("?min=" + this.min + "&max=" + this.max);
+      this.max = parseInt(localStorage.getItem("scrollPosition"));
+      this.fetchPokemons();
+      localStorage.removeItem("scrollPosition");
     } else {
       this.fetchPokemons();
     }
@@ -115,9 +130,15 @@ export default {
   //   localStorage
   // },
   methods: {
-    fetchPokemons(position = "", name = "") {
-      const currentUrl = this.apiUrl + position + name;
-      console.log("this.currentUrl:", currentUrl);
+    fetchPokemons() {
+      const currentUrl =
+        this.apiUrl +
+        "?min=" +
+        this.min +
+        "&max=" +
+        this.max +
+        "&name=" +
+        this.filterSearch;
       fetch(currentUrl)
         .then((resp) => {
           if (resp.status === 200) {
@@ -169,20 +190,21 @@ export default {
         this.canScroll
       ) {
         // this.currentUrl = this.apiUrl + "?min=" + this.min + "&max=" + this.max;
-        this.fetchPokemons("?min=" + this.min + "&max=" + this.max);
+        this.fetchPokemons();
         this.canScroll = false;
         localStorage.setItem("scrollPosition", this.max);
       }
     },
     searchFilter(event) {
       this.pokemons = [];
-      if (event.srcElement.value != "") {
-        this.currentUrl = this.apiUrl + "?name=" + event.srcElement.value;
-        this.fetchPokemons();
-      } else {
-        this.currentUrl = this.apiUrl;
-        this.fetchPokemons();
-      }
+      this.min = 0;
+      this.max = 20;
+      this.filterSearch = event.srcElement.value.toLowerCase().trim();
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(this.fetchPokemons());
+        }, 500);
+      });
     },
   },
 };

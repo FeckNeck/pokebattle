@@ -54,7 +54,13 @@ const router = createRouter({
     if (savedPosition) {
       return new Promise((resolve) => {
         setTimeout(() => {
-          resolve({ savedPosition, behavior: "smooth" });
+          resolve(
+            window.scroll({
+              top: savedPosition.top,
+              left: 0,
+              behavior: "smooth",
+            })
+          );
         }, 1000);
       });
     }

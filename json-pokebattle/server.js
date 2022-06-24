@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 
   if (filters.name != undefined) {
     filteredJSon.data = filteredJSon.data.filter((poke) =>
-      poke.Name.includes(filters.name)
+      poke.Name.toLowerCase().includes(filters.name)
     );
   }
   if (filters.type != undefined) {
