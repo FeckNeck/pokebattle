@@ -1,6 +1,15 @@
 <template>
   <form class="flex justify-center items-center flex-grow">
-    <div class="p-5 bg-white rounded w-fit shadow-login">
+    <div
+      class="
+        p-5
+        bg-white
+        rounded
+        w-fit
+        shadow-login
+        dark:bg-secondary-dark dark:border-ternary-dark
+      "
+    >
       <p class="text-center" v-if="mode == 'login'">Login</p>
       <p class="text-center" v-else>Register</p>
       <p class="pt-2 text-center" v-if="mode == 'login'">
@@ -37,7 +46,17 @@
         />
         <label
           for="email"
-          class="absolute top-0 origin-0 duration-300 p-2 bg-white ml-2 text-sm"
+          class="
+            absolute
+            top-0
+            origin-0
+            duration-300
+            p-2
+            bg-white
+            dark:bg-secondary-dark
+            ml-2
+            text-sm
+          "
           >Email</label
         >
       </div>
@@ -66,6 +85,7 @@
               duration-300
               p-2
               bg-white
+              dark:bg-secondary-dark
               ml-2
               text-sm
             "
@@ -96,6 +116,7 @@
               duration-300
               p-2
               bg-white
+              dark:bg-secondary-dark
               ml-2
               text-sm
             "
@@ -122,22 +143,32 @@
         />
         <label
           for="password"
-          class="absolute top-0 origin-0 duration-300 p-2 bg-white ml-2 text-sm"
+          class="
+            absolute
+            top-0
+            origin-0
+            duration-300
+            p-2
+            bg-white
+            dark:bg-secondary-dark
+            ml-2
+            text-sm
+          "
           >Password</label
         >
       </div>
       <button
         v-if="mode == 'login'"
-        class="bg-gray-400 p-2 rounded text-white w-full"
-        :class="{ 'bg-blue-500': validedFields }"
+        class="p-2 rounded text-white w-full"
+        :class="validedFields ? 'bg-blue-500' : 'bg-gray-400'"
         @click="login()"
       >
         Login
       </button>
       <button
         v-else
-        class="bg-gray-400 p-2 rounded text-white w-full"
-        :class="{ 'bg-blue-500': validedFields }"
+        class="p-2 rounded text-white w-full"
+        :class="validedFields ? 'bg-blue-500' : 'bg-gray-400'"
         @click="createAccount()"
       >
         Register
@@ -159,7 +190,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$route.params);
     if (this.$route.params.error == "refreshToken") {
       this.openToast("Token expired", "error");
     }
@@ -231,7 +261,6 @@ export default {
     login() {
       if (this.validedFields) {
         const self = this;
-        console.log("xd");
         this.$store
           .dispatch("login", {
             email: this.email,

@@ -10,7 +10,4 @@ import "aos/dist/aos.css";
 
 AOS.init();
 
-//localStorage.removeItem("token");
-console.log(localStorage.getItem("token"));
-
 createApp(App).use(router).use(store).use(VueToast).mount("#app");

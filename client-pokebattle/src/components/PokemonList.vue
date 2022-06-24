@@ -8,10 +8,7 @@
       mx-auto
       py-4
       px-4
-      grow
     "
-    data-aos="fade-up"
-    data-aos-duration="800"
   >
     <div class="flex justify-between pb-7">
       <label class="flex flex-row items-center">
@@ -39,15 +36,21 @@
             rounded
             focus:outline-none focus:border-slate-400
             w-52
-            dark:text-black
+            dark:bg-secondary-dark
+            dark:border-ternary-dark
+            dark:focus:border-slate-600
           "
           type="search"
           placeholder="Search"
-          @input="xd($event)"
+          @input="searchFilter($event)"
         />
       </label>
     </div>
-    <div class="grid sm:grid-cols-4 lg:grid-cols-5 grid-cols-2 gap-6">
+    <div
+      class="grid sm:grid-cols-4 lg:grid-cols-5 grid-cols-2 gap-6"
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
       <div
         v-for="(pokemon, index) in pokemons"
         :key="'poke' + index"
@@ -65,6 +68,7 @@
           dark:bg-secondary-dark
           dark:border-x-ternary-dark
           dark:border-t-ternary-dark
+          dark:shadow-ternary-dark
         "
         @click="
           this.$router.push({
@@ -86,7 +90,8 @@
 export default {
   data() {
     return {
-      page: 1,
+      min: 0,
+      max: 20,
       currentUrl: String,
       canScroll: true,
       pokemons: [],
@@ -98,16 +103,22 @@ export default {
     apiUrl: String,
   },
   created() {
-    this.currentUrl = this.apiUrl;
-    this.fetchPokemons();
-  },
-  mounted() {
-    //this.scrollTrigger();
+    if (localStorage.getItem("scrollPosition") !== null) {
+      this.max = localStorage.getItem("scrollPosition");
+      this.fetchPokemons("?min=" + this.min + "&max=" + this.max);
+    } else {
+      this.fetchPokemons();
+    }
     window.addEventListener("scroll", this.scrollTrigger);
   },
+  // mounted() {
+  //   localStorage
+  // },
   methods: {
-    fetchPokemons() {
-      fetch(this.currentUrl)
+    fetchPokemons(position = "", name = "") {
+      const currentUrl = this.apiUrl + position + name;
+      console.log("this.currentUrl:", currentUrl);
+      fetch(currentUrl)
         .then((resp) => {
           if (resp.status === 200) {
             return resp.json();
@@ -117,7 +128,8 @@ export default {
           data.data.forEach((pokemon) => {
             this.pokemons.push(pokemon);
           });
-          this.page++;
+          this.max += 20;
+          this.min = this.max - 20;
           this.canScroll = true;
         })
         .catch((error) => {
@@ -125,27 +137,27 @@ export default {
         });
     },
     colorFromType: function (type) {
-      let color = "border-b-2 border-b";
+      let color;
       if (type == "normal" || type == "steel") {
-        color = color + "-slate-400";
+        color = "border-b-2 border-b-slate-400";
       } else if (type == "grass" || type == "bug") {
-        color = color + "-lime-600";
+        color = "border-b-2 border-b-lime-600";
       } else if (type == "fire") {
-        color = color + "-red-500";
+        color = "border-b-2 border-b-red-500";
       } else if (type == "water") {
-        color = color + "-blue-500";
+        color = "border-b-2 border-b-blue-500";
       } else if (type == "electric" || type == "dragon") {
-        color = color + "-amber-300";
+        color = "border-b-2 border-b-amber-300";
       } else if (type == "poison") {
-        color = color + "-violet-400";
+        color = "border-b-2 border-b-violet-400";
       } else if (type == "dark" || type == "ghost") {
-        color = color + "-gray-800";
+        color = "border-b-2 border-b-gray-800";
       } else if (type == "ice" || type == "flying") {
-        color = color + "-sky-300";
+        color = "border-b-2 border-b-sky-300";
       } else if (type == "fighting" || type == "ground" || type == "rock") {
-        color = color + "-yellow-700";
+        color = "border-b-2 border-b-yellow-700";
       } else if (type == "fairy" || type == "psychic") {
-        color = color + "-pink-300";
+        color = "border-b-2 border-b-pink-300";
       }
       return color;
     },
@@ -156,12 +168,13 @@ export default {
             document.documentElement.clientHeight &&
         this.canScroll
       ) {
-        this.currentUrl = this.apiUrl + "?page=" + this.page;
-        this.fetchPokemons();
+        // this.currentUrl = this.apiUrl + "?min=" + this.min + "&max=" + this.max;
+        this.fetchPokemons("?min=" + this.min + "&max=" + this.max);
         this.canScroll = false;
+        localStorage.setItem("scrollPosition", this.max);
       }
     },
-    xd(event) {
+    searchFilter(event) {
       this.pokemons = [];
       if (event.srcElement.value != "") {
         this.currentUrl = this.apiUrl + "?name=" + event.srcElement.value;

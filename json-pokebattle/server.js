@@ -37,11 +37,9 @@ app.get("/", (req, res) => {
   let filteredJSon = JSON.parse(JSON.stringify(jsonFile));
 
   if (filters.id != undefined) {
-    console.log("filters.id:", filters.id);
     filteredJSon.data = jsonFile.data.filter(
       (poke) => poke.PokedexNumber == filters.id
     );
-    console.log(filteredJSon.data);
   }
 
   if (filters.name != undefined) {
@@ -50,14 +48,13 @@ app.get("/", (req, res) => {
     );
   }
   if (filters.type != undefined) {
-    console.log("filters.type:", filters.type);
     filteredJSon.data = filteredJSon.data.filter(
       (poke) => poke.Types == filters.type
     );
   }
-  if (filters.page != undefined) {
-    max = limit * parseInt(filters.page);
-    min = max - limit;
+  if (filters.min != undefined && filters.max != undefined) {
+    min = filters.min;
+    max = filters.max;
   } else {
     min = 0;
     max = limit;

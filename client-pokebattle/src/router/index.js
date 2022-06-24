@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import AccountView from "../views/AccountView.vue";
 import store from "@/store";
@@ -48,19 +48,25 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ savedPosition, behavior: "smooth" });
+        }, 1000);
+      });
+    }
+  },
 });
 
 router.beforeEach((to, from, next) => {
   if (!store.getters.isLoggedIn && to.meta.requiresAuth) {
-    console.log("1");
     next("/login");
   } else if (store.getters.isLoggedIn && to.meta.requiresAuth == false) {
-    console.log("2");
     next("/account");
   } else {
-    console.log("3");
     next();
   }
 });

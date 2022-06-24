@@ -166,7 +166,6 @@ export default {
     await this.loadPokemon();
     await this.loadEvolutionChain();
     this.renderChart();
-    console.log(this.xd);
   },
   methods: {
     async loadPokemon() {
@@ -257,7 +256,6 @@ export default {
     },
     renderChart() {
       const ctx = document.getElementById("myChart").getContext("2d");
-      console.log("ctx:", ctx);
 
       const myChart = new Chart(ctx, {
         type: "radar",

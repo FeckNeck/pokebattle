@@ -54,15 +54,18 @@ export default {
     switchTheme() {
       if (this.theme === "light") {
         document.documentElement.classList.add("dark");
+        localStorage.setItem("theme", "dark");
         this.theme = "dark";
       } else {
         document.documentElement.classList.remove("dark");
+        localStorage.setItem("theme", "light");
         this.theme = "light";
       }
     },
   },
   mounted() {
     this.theme = localStorage.getItem("theme") || "light";
+    this.switchTheme();
   },
 };
 </script>

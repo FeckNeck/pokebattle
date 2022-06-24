@@ -8,7 +8,6 @@
 <script>
 export default {
   mounted() {
-    console.log("in mounted");
     this.$store.dispatch("account");
   },
   methods: {
