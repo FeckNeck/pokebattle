@@ -14,8 +14,8 @@
     >
       <div class="sm:flex sm:justify-between sm:items-center py-4">
         <div class="flex justify-between items-center">
-          <a>
-            <img src="../assets/logo-hugomrvt.png" class="h-6" />
+          <a href="/">
+            <img src="../assets/logo-hugomrvt.png" class="h-6" alt="logo" />
           </a>
           <theme-switch-vue class="sm:hidden block"></theme-switch-vue>
           <button class="sm:hidden" type="button" @click="isOpen = !isOpen">
@@ -56,6 +56,7 @@
         >
           <router-link
             to="/pokedex"
+            aria-label="pokedex"
             class="
               block
               sm:px-5 sm:py-0
@@ -70,6 +71,7 @@
           <div>
             <router-link
               to="/account"
+              aria-label="account"
               class="
                 hover:text-teal-400
                 transition-colors
@@ -96,15 +98,16 @@
               </svg>
             </router-link>
             <router-link
-              class="dark:hover:text-teal-500 sm:hidden block"
               to="/login"
+              aria-label="login"
+              class="text-lg dark:hover:text-teal-500 sm:hidden block"
               v-else
               >Login</router-link
             >
           </div>
         </div>
         <div class="flex flex-row">
-          <router-link to="/account" v-if="isLoggedIn">
+          <router-link to="/account" alt="account" v-if="isLoggedIn">
             <svg
               class="
                 hover:text-teal-400
@@ -128,8 +131,9 @@
             </svg>
           </router-link>
           <router-link
-            class="dark:hover:text-teal-500 sm:block hidden"
             to="/login"
+            alt="login"
+            class="dark:hover:text-teal-500 sm:block hidden"
             v-else
             >Login</router-link
           >

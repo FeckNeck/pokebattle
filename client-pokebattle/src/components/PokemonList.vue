@@ -92,6 +92,7 @@
           <img
             class="transition-all pokemon-image max-w-[84px] max-h-[84px]"
             :src="pixelImageLink + pokemon.PokedexNumber + '.png'"
+            alt="pokemon image"
           />
           <p class="text-center">{{ pokemon.Name }}</p>
         </div>

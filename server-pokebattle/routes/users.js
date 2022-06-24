@@ -37,6 +37,7 @@ router.post("/login", async (req, res) => {
         accessToken: accessToken,
       });
     } else {
+      console.log("xd");
       res.status(403).send("Invalid email or password");
     }
   } catch (error) {

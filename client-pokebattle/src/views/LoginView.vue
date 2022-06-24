@@ -1,5 +1,5 @@
 <template>
-  <form class="flex justify-center items-center flex-grow">
+  <form class="flex justify-center items-center flex-grow" v-on:submit.prevent>
     <div
       class="
         p-5

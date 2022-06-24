@@ -3,6 +3,7 @@
     class="hover:scale-110 duration-300"
     href="#"
     @click.prevent="switchTheme"
+    aria-label="switch theme"
   >
     <svg
       width="20"

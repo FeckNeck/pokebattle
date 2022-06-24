@@ -42,7 +42,6 @@ const actions = {
       instance
         .post("/users/login", userInfos, { withCredentials: true })
         .then(function (response) {
-          console.log("response:", response);
           commit("setStatus", "logged");
           commit("logUser", response.data.accessToken);
           instance.defaults.headers.common[
@@ -52,7 +51,6 @@ const actions = {
           resolve(response);
         })
         .catch(function (error) {
-          console.log("error:", error);
           commit("setStatus", "error_login");
           reject(error);
         });
